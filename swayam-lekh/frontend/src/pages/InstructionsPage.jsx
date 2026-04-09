@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000').replace(/\/$/, '');
+
 import { useNavigate } from 'react-router-dom';
 import { useStudent } from '../context/StudentContext';
 import { useExam } from '../context/ExamContext';
@@ -50,7 +52,7 @@ export default function InstructionsPage() {
 
     const getAssistantIntent = async (transcript, context = []) => {
         try {
-            const resp = await fetch('http://localhost:5000/api/intent', {
+            const resp = await fetch(`${BACKEND_URL}/api/intent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ transcript, context }),

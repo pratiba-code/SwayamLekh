@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useExam } from '../context/ExamContext';
 import { useStudent } from '../context/StudentContext';
 import { useVoice } from '../context/VoiceContext';
-import { useExamTimer } from '../hooks/useExamTimer';
 import { sarvamTranscribe } from '../utils/sarvamSTT';
 import { useWhisper } from '../hooks/useWhisper';
 import { applyPhoneticMap } from '../utils/phoneticMap';
@@ -53,11 +52,15 @@ export default function ExamPage() {
     confirmSubmit,
     dismissAlarm,
     triggerAlarm,
+    formattedTime,
   } = useExam();
 
   const { student } = useStudent();
   const { mode, lastCommand, setLastCommand } = useVoice();
-  const { timeLeft, formatted, isWarning, isCritical } = useExamTimer(state.startTime);
+  const timeLeft = state.timeLeft;
+  const formatted = formattedTime || '00:00:00';
+  const isWarning = timeLeft > 0 && timeLeft <= 600;
+  const isCritical = timeLeft > 0 && timeLeft <= 300;
   const instructionLang = student?.instructionLang === 'ta' ? 'ta' : 'en';
   // Temporarily disable exam intro audio when true
   const DISABLE_INTRO_AUDIO = true;
